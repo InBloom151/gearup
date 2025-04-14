@@ -6,6 +6,7 @@ from .landlord_detail import (
     LandlordDetailInDBBase,
     LandlordDetailOut,
 )
+from .token import Token, TokenRefresh
 
 __all__ = [
     "UserBase",
@@ -18,6 +19,8 @@ __all__ = [
     "LandlordDetailUpdate",
     "LandlordDetailInDBBase",
     "LandlordDetailOut",
+    "Token",
+    "TokenRefresh",
 ]
 
 UserOut.model_rebuild()
