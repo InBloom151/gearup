@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
+from typing import Optional
 from passlib.context import CryptContext
 from app.core.config import settings
 
@@ -11,14 +12,11 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
-def create_token(data: dict, token_type: str = "access"):
+def create_token(data: dict, token_type: str = "access", expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     now = datetime.now(timezone.utc)
 
-    expire = now + \
-        timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES) \
-        if token_type == "access" \
-        else timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
+    expire = now + expires_delta
 
     to_encode.update({"exp": expire, "type": token_type})
 
