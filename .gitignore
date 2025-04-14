@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.sqlite3
+*.env
+*.env.*
+*.log
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.env/
+env/
+.venv/
+ENV/
+Pipfile.lock
+poetry.lock
+
+# mypy, pyright, pylint etc.
+.mypy_cache/
+.pyright/
+.pytest_cache/
+.coverage
+.cache
+.tox/
+.nox/
+
+# FastAPI specific
+instance/
+__pycache__/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# OS-specific
+.DS_Store
+Thumbs.db
