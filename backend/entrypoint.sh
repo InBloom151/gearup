@@ -1,7 +1,12 @@
 #!/bin/sh
 set -e
 
-# ./wait-for-it.sh db:5432 -t 30
+# Ожидание готовности базы данных
+until pg_isready -h db -p 5432 -U admin -d gearup; do
+  echo "Ожидание базы данных..."
+  sleep 1
+done
+echo "База данных доступна!"
 
 echo "Применение миграций Alembic..."
 alembic upgrade head

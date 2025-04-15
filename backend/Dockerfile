@@ -6,6 +6,9 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN apt-get update && apt-get install -y postgresql-client \
+    && apt-get autoremove -y
+
 COPY . .
 
 COPY entrypoint.sh /app/entrypoint.sh
