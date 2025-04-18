@@ -1,17 +1,36 @@
-FROM python:3.11-slim
+# ---------- build dependencies ----------
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /app
 
-COPY requirements.txt .
+# system deps (asyncpg compiling)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements.txt .
 
-RUN apt-get update && apt-get install -y postgresql-client \
-    && apt-get autoremove -y
+RUN pip install --upgrade pip && \
+    pip install --prefix=/install --no-cache-dir -r requirements.txt
 
-COPY . .
+# ---------- runtime (prod) ----------
+FROM python:3.11-slim-bookworm AS prod
 
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+ENV PYTHONBUFFERED=1 \
+    PATH="/install/bin:$PATH"
 
-CMD ["/app/entrypoint.sh"]
+WORKDIR /app
+
+COPY --from=builder /install /usr/local
+COPY backend /app
+
+RUN adduser --disabled-password --gecos '' appuser && \
+    chown -R appuser /app
+USER appuser
+
+ENTRYPOINT [ "/app/scripts/entrypoint.sh" ]
+
+# ---------- runtime (dev) ----------
+FROM prod AS dev
+ENV APP_ENV=development
+ENTRYPOINT [ "/app/scripts/entrypoint-dev.sh" ]
