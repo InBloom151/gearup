@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models import User
-from app.schemas import UserCreate
+from app.db.models import User
+from app.api.v1.schemas import UserCreate
 
 async def get_user_by_email(db: AsyncSession, email: str) -> User:
     result = await db.execute(select(User).filter(User.email == email))

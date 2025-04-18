@@ -1,41 +1,41 @@
+from __future__ import annotations
 from datetime import datetime
-from enum import Enum
-from typing import Optional, TYPE_CHECKING
-from pydantic import BaseModel, EmailStr
+from app.core.enums import EntityTypes
+from typing import Optional
 
-if TYPE_CHECKING:
-    from .user import UserInDBBase
+from pydantic import BaseModel, Field
+from .user import UserInDB
 
-class EntityType(str, Enum):
-    individual = "individual"
-    legal = "legal"
 
 class LandlordDetailBase(BaseModel):
-    entity_type: EntityType
+    entity_type: EntityTypes
     company_name: Optional[str] = None
     registration_number: Optional[str] = None
     tax_id: Optional[str] = None
     address: Optional[str] = None
-    additional_info: Optional[str] = None
+    additional_info: Optional[str] = Field(None, max_length=500)
+
 
 class LandlordDetailCreate(LandlordDetailBase):
     user_id: int
 
+
 class LandlordDetailUpdate(BaseModel):
-    entity_type: Optional[EntityType] = None
+    entity_type: Optional[EntityTypes] = None
     company_name: Optional[str] = None
     registration_number: Optional[str] = None
     tax_id: Optional[str] = None
     address: Optional[str] = None
     additional_info: Optional[str] = None
 
-class LandlordDetailInDBBase(LandlordDetailBase):
+
+class LandlordDetailInDB(LandlordDetailBase):
     id: int
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = dict(from_attributes=True)
 
-class LandlordDetailOut(LandlordDetailInDBBase):
-    user: Optional["UserInDBBase"] = None
+
+class LandlordDetailOut(LandlordDetailInDB):
+    user: Optional[UserInDB] = None
