@@ -37,13 +37,13 @@ async def login(
     response.set_cookie(
         "refresh_token",
         refresh,
-        max_age=int(
-            timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES).total_seconds()
-        ),
+        max_age=int(timedelta(
+            minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
+        ).total_seconds()),
         httponly=True,
         secure=True,
         samesite="lax",
-        path="/api/v1/auth",
+        path="/",
     )
     return AccessToken(access_token=access)
 

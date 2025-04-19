@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-BASE_DIR = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 class Settings(BaseSettings):
     # --- Database ---
@@ -22,7 +22,10 @@ class Settings(BaseSettings):
     LOG_LEVEL: str
 
     model_config = SettingsConfigDict(
-        env_file=os.getenv("ENV_FILE", BASE_DIR / ".env.dev"),
+        env_file=os.getenv(
+            "ENV_FILE",
+            BASE_DIR / f".env.{os.getenv('APP_ENV', 'dev')}"
+        ),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="allow",

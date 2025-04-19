@@ -6,20 +6,20 @@ from typing import Annotated
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 from sqlalchemy import DateTime, Integer
 
-UTC_NOW: Annotated[datetime, mapped_column(
-    DateTime(timezone=True),
-    default=lambda: datetime.now(timezone.utc),
-)] = ...
-
 class Base(DeclarativeBase):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    created_at: Mapped[datetime] = UTC_NOW
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
 
     @declared_attr.directive

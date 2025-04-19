@@ -5,6 +5,7 @@ from typing import Any
 
 from jose import jwt, JWTError
 from passlib.context import CryptContext
+import uuid
 
 from app.core.config import settings
 
@@ -40,6 +41,7 @@ def create_jwt(
             "sub": sub,
             "type": token_type,
             "iat": now,
-            "exp": now + timedelta(minutes=ttl)
+            "exp": now + timedelta(minutes=ttl),
+            "jti": str(uuid.uuid4()),
         }
     )

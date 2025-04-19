@@ -26,7 +26,7 @@ def create_app(*, lifespan=None) -> FastAPI:
     app.include_router(api_router, prefix="/api/v1")
 
     # ───── Health check ─────
-    @app.get("/health", include_in_schema=False)
+    @app.get("/api/v1/health", include_in_schema=False)
     async def _health() -> dict[str, str]:
         return {"status": "ok"}
 

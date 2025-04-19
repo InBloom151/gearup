@@ -23,7 +23,7 @@ class AuthService:
             )
         data.password = security.hash_password(data.password)
         user = await self.repo.create(data)
-        return UserOut.model_validate(user, from_attributes=True)
+        return user
 
     # ────── login / refresh helpers ───────────────────────────────
     async def login(self, email: str, password: str) -> tuple[str, str]:

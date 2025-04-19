@@ -1,40 +1,49 @@
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
-
-import pytest_asyncio
-from fastapi import FastAPI
+import pytest
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from starlette import status
 
-from app.db.base import Base
-from app.db.session import get_session
-from app import create_app
+from app.api.v1.schemas.token import AccessToken
 
-# ───────── in‑memory DB & session override ──────────────────────
-@pytest_asyncio.fixture(scope="session")
-async def _engine():
-    engine = create_async_engine("sqlite+aiosqlite:///:memory:", future=True, echo=False)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield engine
-    await engine.dispose()
 
-@pytest_asyncio.fixture(scope="function")
-async def db_session(_engine) -> AsyncGenerator[AsyncSession, None]:
-    async_session = async_sessionmaker(_engine, expire_on_commit=False)
-    async with async_session() as session:
-        yield session
-        await session.rollback()
+@pytest.mark.asyncio
+async def test_register_and_login(client: AsyncClient, user_data):
+    # ------ register ------
+    res = await client.post("/api/v1/auth/register", json=user_data.model_dump())
+    assert res.status_code == status.HTTP_201_CREATED
+    assert res.json()["email"] == user_data.email
 
-# ───────── FastAPI test‑client ──────────────────────────────────
-@asynccontextmanager
-async def _lifespan(_: FastAPI):
-    yield
+    # ------ login ------
+    res = await client.post(
+        "/api/v1/auth/login",
+        json={"email": user_data.email, "password": user_data.password},
+    )
+    assert res.status_code == 200
+    token = AccessToken(**res.json())
+    assert token.token_type == "bearer"
 
-@pytest_asyncio.fixture(scope="function")
-async def client(db_session) -> AsyncGenerator[AsyncClient, None]:
-    app = create_app(lifespan=_lifespan)
-    app.dependency_overrides[get_session] = lambda: db_session
+    # refresh cookie должна появиться
+    assert "refresh_token" in res.cookies
 
-    async with AsyncClient(app=app, base_url="http://testserver") as ac:
-        yield ac
+    # ------ access protected route (example) ------
+    headers = {"Authorization": f"Bearer {token.access_token}"}
+    protected = await client.get("/api/v1/health", headers=headers)
+    assert protected.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_refresh_flow(client: AsyncClient, create_user, user_data):
+    await create_user(user_data)
+
+    # initial login
+    res = await client.post(
+        "/api/v1/auth/login",
+        json={"email": user_data.email, "password": user_data.password},
+    )
+    refresh_cookie = res.cookies.get("refresh_token")
+    access1 = res.json()["access_token"]
+
+    # wait / simulate expire → call refresh
+    res = await client.post("/api/v1/auth/refresh", cookies={"refresh_token": refresh_cookie})
+    assert res.status_code == 200
+    access2 = res.json()["access_token"]
+    assert access1 != access2

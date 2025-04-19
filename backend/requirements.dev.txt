@@ -2,3 +2,7 @@ pytest
 pytest-asyncio
 httpx
 factory-boy
+pytest-env
+aiosqlite
+bcrypt
+python-multipart
