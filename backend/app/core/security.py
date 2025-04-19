@@ -1,35 +1,45 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta, timezone
+from typing import Any
+
 from jose import jwt, JWTError
-from typing import Optional
 from passlib.context import CryptContext
+
 from app.core.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+# ───────── password ──────────────────────────────────────────────────
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
 
-def get_password_hash(password: str) -> str:
+def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
-def create_token(data: dict, token_type: str = "access", expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    now = datetime.now(timezone.utc)
+# ───────── jwt ───────────────────────────────────────────────────────
+def _jwt_encode(payload: dict[str, Any]) -> str:
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
-    expire = now + expires_delta
-
-    to_encode.update({"exp": expire, "type": token_type})
-
-    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-
-
-def decode_token(token: str) -> dict:
+def _jwt_decode(token: str) -> dict[str, Any] | None:
     try:
-        payload = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithms=[settings.ALGORITHM]
-        )
-        return payload
+        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:
         return None
+
+def create_jwt(
+    *,
+    sub: str,
+    token_type: str,
+    ttl: int,
+) -> str:
+    now = datetime.now(timezone.utc)
+
+    return _jwt_encode(
+        {
+            "sub": sub,
+            "type": token_type,
+            "iat": now,
+            "exp": now + timedelta(minutes=ttl)
+        }
+    )
