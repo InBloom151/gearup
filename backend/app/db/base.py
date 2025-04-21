@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Annotated
 
-from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 from sqlalchemy import DateTime, Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+
 
 class Base(DeclarativeBase):
 

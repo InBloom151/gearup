@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import AsyncGenerator
 
+from app.core.config import settings
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -9,8 +10,6 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from sqlalchemy.pool import NullPool
-
-from app.core.config import settings
 
 # ---------- Engine ----------
 engine: AsyncEngine = create_async_engine(
@@ -26,6 +25,7 @@ async_session_factory = async_sessionmaker(
     expire_on_commit=False,
     class_=AsyncSession,
 )
+
 
 # ---------- FastAPI dependency ----------
 async def get_session() -> AsyncGenerator[AsyncSession, None]:

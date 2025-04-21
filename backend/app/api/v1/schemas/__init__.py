@@ -1,11 +1,11 @@
-from .user import UserBase, UserCreate, UserUpdate, UserOut
 from .landlord_detail import (
     LandlordDetailBase,
     LandlordDetailCreate,
-    LandlordDetailUpdate,
     LandlordDetailOut,
+    LandlordDetailUpdate,
 )
 from .token import AccessToken
+from .user import UserBase, UserCreate, UserOut, UserUpdate
 
 __all__ = [
     "UserBase",

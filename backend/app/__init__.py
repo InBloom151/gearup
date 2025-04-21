@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .api.v1 import router as api_router
 
+
 def create_app(*, lifespan=None) -> FastAPI:
     app = FastAPI(
         title="GearUp API",

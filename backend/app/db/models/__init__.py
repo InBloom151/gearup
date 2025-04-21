@@ -1,7 +1,4 @@
-from .user import User
 from .landlord_detail import LandlordDetail
+from .user import User
 
-__all__ = [
-    "User",
-    "LandlordDetail"
-]
+__all__ = ["User", "LandlordDetail"]

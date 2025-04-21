@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
+
 class Settings(BaseSettings):
     # --- Database ---
     DATABASE_URL: str
@@ -23,12 +24,12 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=os.getenv(
-            "ENV_FILE",
-            BASE_DIR / f".env.{os.getenv('APP_ENV', 'dev')}"
+            "ENV_FILE", BASE_DIR / f".env.{os.getenv('APP_ENV', 'dev')}"
         ),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="allow",
     )
+
 
 settings = Settings()

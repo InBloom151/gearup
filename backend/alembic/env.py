@@ -1,17 +1,16 @@
 """Async Alembic environment, compatible with SQLAlchemy 2.0."""
+
 from __future__ import annotations
 
 import asyncio
 from logging.config import fileConfig
-from typing import Callable
 
 from alembic import context
+from app.core.config import settings
+from app.db import models  # noqa
+from app.db.base import Base
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
-
-from app.core.config import settings
-from app.db.base import Base
-from app.db import models  # noqa: F401  → импортирует все модели, чтобы Base.metadata была полной
 
 # -------------------------------------------------------------------------
 config = context.config
@@ -30,7 +29,7 @@ def run_migrations_offline() -> None:
         url=settings.DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
-        compare_type=True,            # следить за изменением типов колонок
+        compare_type=True,  # следить за изменением типов колонок
         dialect_opts={"paramstyle": "named"},
     )
 

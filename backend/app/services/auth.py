@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import HTTPException, status
-
-from app.repositories.user import UserRepository
+from app.api.v1.schemas.user import UserCreate, UserOut
 from app.core import security
 from app.core.config import settings
-from app.api.v1.schemas.user import UserCreate, UserOut
+from app.repositories.user import UserRepository
+from fastapi import HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class AuthService:

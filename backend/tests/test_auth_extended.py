@@ -1,10 +1,9 @@
 import pytest
-from httpx import AsyncClient
-from starlette import status
-from jose import JWTError, jwt
-
 from app.api.v1.schemas.token import AccessToken
 from app.core.config import settings
+from httpx import AsyncClient
+from jose import jwt
+from starlette import status
 
 
 @pytest.mark.asyncio
@@ -114,6 +113,7 @@ async def test_login_and_refresh_rotation(client: AsyncClient, create_user, user
     assert token1 != token2
     assert cookie1 != cookie2
     from jose import jwt  # noqa
+
     payload = jwt.decode(token2, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     assert payload["type"] == "access"
     assert payload["sub"] == user_data.email

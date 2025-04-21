@@ -1,10 +1,15 @@
 from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from app.core.enums import EntityTypes
-
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Enum, ForeignKey, Text
-
 from app.db.base import Base
+from sqlalchemy import Enum, ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from app.db.models import User
+
 
 class LandlordDetail(Base):
 

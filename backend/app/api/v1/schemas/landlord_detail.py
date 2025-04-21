@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 from datetime import datetime
-from app.core.enums import EntityTypes
 from typing import Optional
 
+from app.core.enums import EntityTypes
 from pydantic import BaseModel, Field
+
 from .user import UserInDB
 
 

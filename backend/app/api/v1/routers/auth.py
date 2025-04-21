@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, Body, Response, Cookie, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.api.v1.schemas.user import UserCreate, UserOut
 from app.api.v1.schemas.token import AccessToken
+from app.api.v1.schemas.user import UserCreate, UserOut
+from app.core.config import settings
 from app.db.session import get_session
 from app.services.auth import AuthService
-from app.core.config import settings
+from fastapi import APIRouter, Body, Cookie, Depends, HTTPException, Response, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -37,9 +36,9 @@ async def login(
     response.set_cookie(
         "refresh_token",
         refresh,
-        max_age=int(timedelta(
-            minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
-        ).total_seconds()),
+        max_age=int(
+            timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES).total_seconds()
+        ),
         httponly=True,
         secure=True,
         samesite="lax",

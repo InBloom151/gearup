@@ -1,8 +1,7 @@
 import pytest
+from app.api.v1.schemas.token import AccessToken
 from httpx import AsyncClient
 from starlette import status
-
-from app.api.v1.schemas.token import AccessToken
 
 
 @pytest.mark.asyncio
@@ -43,7 +42,9 @@ async def test_refresh_flow(client: AsyncClient, create_user, user_data):
     access1 = res.json()["access_token"]
 
     # wait / simulate expire → call refresh
-    res = await client.post("/api/v1/auth/refresh", cookies={"refresh_token": refresh_cookie})
+    res = await client.post(
+        "/api/v1/auth/refresh", cookies={"refresh_token": refresh_cookie}
+    )
     assert res.status_code == 200
     access2 = res.json()["access_token"]
     assert access1 != access2

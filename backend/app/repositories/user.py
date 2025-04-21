@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import Sequence
-
+from app.api.v1.schemas.user import UserCreate
+from app.db.models import User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import User
-from app.api.v1.schemas.user import UserCreate
 
 class UserRepository:
 
