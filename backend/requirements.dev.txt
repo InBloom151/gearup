@@ -6,3 +6,8 @@ pytest-env
 aiosqlite
 bcrypt
 python-multipart
+pre-commit
+black
+isort
+flake8
+mypy
