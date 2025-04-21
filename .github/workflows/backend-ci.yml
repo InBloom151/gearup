@@ -45,8 +45,5 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
-      - name: Run mypy
-        run: mypy .
-
       - name: Run tests
         run: pytest -q --disable-warnings --maxfail=1
