@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from app.core.enums import UserRole
 from app.db.base import Base
@@ -8,7 +8,7 @@ from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from app.db.models import LandlordDetail
+    from app.db.models import LandlordDetail, Transport
 
 
 class User(Base):
@@ -22,4 +22,7 @@ class User(Base):
         back_populates="user",
         uselist=False,
         lazy="selectin",
+    )
+    transports: Mapped[List["Transport"]] = relationship(
+        "Transport", back_populates="landlord", lazy="selectin"
     )

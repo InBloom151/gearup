@@ -6,7 +6,7 @@ from sqlalchemy import DECIMAL, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from app.db.models import Category, User
+    from app.db.models import Category, TransportPhoto, User
 
 
 class Transport(Base):
@@ -32,8 +32,14 @@ class Transport(Base):
         back_populates="transports",
         lazy="selectin",
     )
+    photos: Mapped[list["TransportPhoto"]] = relationship(
+        "TransportPhoto",
+        back_populates="transport",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
     category: Mapped["Category"] = relationship(
         "Category",
-        back_populates="categories",
+        back_populates="transports",
         lazy="selectin",
     )
