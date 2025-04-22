@@ -8,3 +8,4 @@ pydantic-settings==2.8.1
 python-dotenv>=1.0.1
 python-jose==3.3.0
 passlib==1.7.4
+inflect>=6.0.0

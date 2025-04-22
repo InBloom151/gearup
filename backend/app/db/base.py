@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+import inflect
 from sqlalchemy import DateTime, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+
+inflector = inflect.engine()
 
 
 class Base(DeclarativeBase):
@@ -24,4 +27,4 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+        return inflector.plural(cls.__name__.lower())
