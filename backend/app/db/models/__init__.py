@@ -1,3 +1,4 @@
+from .booking import Booking
 from .category import Category
 from .landlord_detail import LandlordDetail
 from .transport import Transport
@@ -10,4 +11,5 @@ __all__ = [
     "Category",
     "Transport",
     "TransportPhoto",
+    "Booking",
 ]

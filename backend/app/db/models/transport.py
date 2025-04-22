@@ -1,12 +1,12 @@
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from app.db.base import Base
 from sqlalchemy import DECIMAL, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from app.db.models import Category, TransportPhoto, User
+    from app.db.models import Booking, Category, TransportPhoto, User
 
 
 class Transport(Base):
@@ -41,5 +41,10 @@ class Transport(Base):
     category: Mapped["Category"] = relationship(
         "Category",
         back_populates="transports",
+        lazy="selectin",
+    )
+    bookings: Mapped[List["Booking"]] = relationship(
+        "Booking",
+        back_populates="transport",
         lazy="selectin",
     )

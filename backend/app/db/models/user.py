@@ -8,7 +8,7 @@ from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from app.db.models import LandlordDetail, Transport
+    from app.db.models import Booking, LandlordDetail, Transport
 
 
 class User(Base):
@@ -24,5 +24,12 @@ class User(Base):
         lazy="selectin",
     )
     transports: Mapped[List["Transport"]] = relationship(
-        "Transport", back_populates="landlord", lazy="selectin"
+        "Transport",
+        back_populates="landlord",
+        lazy="selectin",
+    )
+    bookings: Mapped[List["Booking"]] = relationship(
+        "Booking",
+        back_populates="renter",
+        lazy="selectin",
     )
