@@ -16,11 +16,9 @@ class Transport(Base):
         index=True,
     )
     category_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            ForeignKey("categories.id", ondelete="RESTRICT"),
-            nullable=False,
-            index=True,
-        )
+        ForeignKey("categories.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
     )
 
     title: Mapped[str] = mapped_column(String(128), nullable=False)
