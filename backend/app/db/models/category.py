@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, Optional
 
 from app.db.base import Base
-from sqlalchemy import String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, backref, foreign, mapped_column, relationship, remote
 
 if TYPE_CHECKING:
     from app.db.models import Transport
@@ -17,14 +17,14 @@ class Category(Base):
         cascade="all, delete-orphan",
         lazy="selectin",
     )
-    # parent_id: Mapped[Optional[int]] = mapped_column(
-    #     ForeignKey("categories.id", ondelete="SET NULL"),
-    #     nullable=True,
-    # )
+    parent_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("categories.id", ondelete="SET NULL"),
+        nullable=True,
+    )
 
-    # parent: Mapped[Optional["Category"]] = relationship(
-    #     "Category",
-    #     remote_side=["Category.id"],
-    #     backref=backref("children", lazy="selectin"),
-    #     lazy="selectin",
-    # )
+    parent: Mapped[Optional["Category"]] = relationship(
+        "Category",
+        primaryjoin=lambda: foreign(Category.parent_id) == remote(Category.id),
+        backref=backref("children", lazy="selectin"),
+        lazy="selectin",
+    )
