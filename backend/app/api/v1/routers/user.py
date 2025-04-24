@@ -31,7 +31,7 @@ async def create_landlord_detail(
     user: User = Depends(get_current_user),
     svc: UserService = Depends(_svc),
 ):
-    landlord_data = LandlordDetailCreate(user.id, **data.model_dump())
+    landlord_data = LandlordDetailCreate(user_id=user.id, **data.model_dump())
     return await svc.create_landlord_detail(landlord_data)
 
 

@@ -53,7 +53,7 @@ class UserService:
         if landlord_detail.user_id != user_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="User ID doesn't match the credentials",
+                detail="User ID doesn`t match the credentials",
             )
 
         return await self.repo.update_landlord(landlord_detail, data)
