@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from app.core import security
+from app.core.enums import UserRole
+from app.db.models import User
 from app.db.session import get_session
 from app.repositories.user import UserRepository
 from fastapi import Depends, HTTPException, status
@@ -34,4 +36,10 @@ async def get_current_user(
             detail="User not found",
         )
 
+    return user
+
+
+async def get_current_landlord(user: User = Depends(get_current_user)) -> User:
+    if user.role != UserRole.LANDLORD:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Requires landlord role")
     return user
