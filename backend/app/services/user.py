@@ -28,6 +28,17 @@ class UserService:
 
         return await self.repo.update_user(user, data)
 
+    async def delete_user(self, user_id: int) -> None:
+        user = await self.repo.get_user_by_id(user_id)
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
+
+        await self.repo.delete_user(user)
+
     async def create_landlord_detail(
         self, data: LandlordDetailCreate
     ) -> LandlordDetailOut:
