@@ -22,6 +22,47 @@ async def test_update_user_router(client, create_user, user_data):
 
 
 @pytest.mark.asyncio
+async def test_get_current_user_router(client, create_user, user_data):
+    await create_user(user_data)
+    login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": user_data.email, "password": user_data.password},
+    )
+    token = login.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res = await client.get(
+        "/api/v1/user/get_current_user",
+        headers=headers,
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert res.json()["email"] == user_data.email
+
+
+@pytest.mark.asyncio
+async def test_delete_user_router(client, create_user, user_data):
+    await create_user(user_data)
+    login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": user_data.email, "password": user_data.password},
+    )
+    token = login.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res = await client.delete(
+        "/api/v1/user/delete_user",
+        headers=headers,
+    )
+    assert res.status_code == status.HTTP_204_NO_CONTENT
+
+    res2 = await client.get(
+        "/api/v1/user/get_current_user",
+        headers=headers,
+    )
+    assert res2.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.asyncio
 async def test_create_and_update_landlord_router(client, create_user, user_data):
     await create_user(user_data)
     login = await client.post(

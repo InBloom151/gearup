@@ -34,6 +34,21 @@ async def test_update_user_success(db_session, user_data):
 
 
 @pytest.mark.asyncio
+async def test_delete_user_service(db_session, user_data):
+    repo = UserRepository(db_session)
+    dto = UserCreate(**user_data.model_dump())
+    dto.password = security.hash_password(dto.password)
+    user = await repo.create_user(dto)
+
+    svc = UserService(db_session)
+    await svc.delete_user(user.id)
+
+    with pytest.raises(HTTPException) as exc:
+        await svc.delete_user(user.id)
+    assert exc.value.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.asyncio
 async def test_create_landlord_detail_and_duplicate(db_session, user_data):
     dto = UserCreate(**user_data.model_dump())
     dto.password = security.hash_password(dto.password)

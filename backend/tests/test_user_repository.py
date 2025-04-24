@@ -38,6 +38,20 @@ async def test_update_user(db_session, user_data):
 
 
 @pytest.mark.asyncio
+async def test_delete_user_repository(db_session, user_data):
+    repo = UserRepository(db_session)
+    dto = UserCreate(**user_data.model_dump())
+    dto.password = security.hash_password(dto.password)
+    user = await repo.create_user(dto)
+
+    assert await repo.get_user_by_id(user.id) is not None
+
+    await repo.delete_user(user)
+
+    assert await repo.get_user_by_id(user.id) is None
+
+
+@pytest.mark.asyncio
 async def test_landlord_crud(db_session, user_data):
     repo = UserRepository(db_session)
     dto = UserCreate(**user_data.model_dump())

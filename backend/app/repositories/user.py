@@ -43,7 +43,7 @@ class UserRepository:
         return user
 
     async def delete_user(self, user: User) -> None:
-        self.session.delete(user)
+        await self.session.delete(user)
         await self.session.commit()
 
     async def get_landlord_by_user_id(self, user_id: int) -> LandlordDetail | None:
