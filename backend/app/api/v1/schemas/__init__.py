@@ -9,6 +9,7 @@ from .category import (
 from .landlord_detail import (
     LandlordDetailBase,
     LandlordDetailCreate,
+    LandlordDetailCreateIn,
     LandlordDetailOut,
     LandlordDetailUpdate,
 )
@@ -36,6 +37,7 @@ __all__ = [
     "UserOut",
     "LandlordDetailBase",
     "LandlordDetailCreate",
+    "LandlordDetailCreateIn",
     "LandlordDetailUpdate",
     "LandlordDetailOut",
     "AccessToken",

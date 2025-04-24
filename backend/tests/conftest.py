@@ -70,7 +70,7 @@ async def create_user(
     async def _factory(data: UserCreate) -> None:
         dto = UserCreate(**data.model_dump())
         dto.password = security.hash_password(dto.password)
-        await UserRepository(db_session).create(dto)
+        await UserRepository(db_session).create_user(dto)
 
     return _factory
 

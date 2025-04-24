@@ -15,18 +15,18 @@ class AuthService:
 
     # ────── registration ──────────────────────────────────────────
     async def register(self, data: UserCreate) -> UserOut:
-        if await self.repo.get_by_email(data.email):
+        if await self.repo.get_user_by_email(data.email):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
         data.password = security.hash_password(data.password)
-        user = await self.repo.create(data)
+        user = await self.repo.create_user(data)
         return user
 
     # ────── login / refresh helpers ───────────────────────────────
     async def login(self, email: str, password: str) -> tuple[str, str]:
-        user = await self.repo.get_by_email(email)
+        user = await self.repo.get_user_by_email(email)
         if not user or not security.verify_password(password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -43,7 +43,7 @@ class AuthService:
             )
 
         email: str | None = payload.get("sub")
-        if not email or not await self.repo.get_by_email(email):
+        if not email or not await self.repo.get_user_by_email(email):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found",

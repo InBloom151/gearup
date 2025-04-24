@@ -18,6 +18,10 @@ class LandlordDetailBase(BaseModel):
     additional_info: Optional[str] = Field(None, max_length=500)
 
 
+class LandlordDetailCreateIn(LandlordDetailBase):
+    pass
+
+
 class LandlordDetailCreate(LandlordDetailBase):
     user_id: int
 
