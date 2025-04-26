@@ -47,6 +47,14 @@ async def login(
     return AccessToken(access_token=access)
 
 
+# ───────────────────── logout ──────────────────────────
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie("refresh_token", path="/")
+    response.delete_cookie("refresh_token", path="/api/v1/auth")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 # ───────────────────── refresh ────────────────────────
 @router.post("/refresh", response_model=AccessToken)
 async def refresh(
