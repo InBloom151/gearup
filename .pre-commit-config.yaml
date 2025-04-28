@@ -43,3 +43,5 @@ repos:
           - eslint@^9.0.0
           - prettier@^3.3.2
           - typescript@^5.4.5
+        files: ^frontend/
+        pass_filenames: false
