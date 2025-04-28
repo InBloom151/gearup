@@ -18,7 +18,8 @@ export default tseslint.config(
       ecmaVersion: 2022,
       globals: globals.browser,
       parserOptions: {
-        project: './tsconfig.json'
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname
       }
     },
     plugins: {
