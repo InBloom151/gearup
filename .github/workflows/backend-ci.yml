@@ -1,4 +1,4 @@
-name: GearUp CI
+name: GearUp CI Backend
 
 on:
   push:
