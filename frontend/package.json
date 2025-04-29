@@ -16,6 +16,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix --max-warnings 0",
+      "tsc -p tsconfig.json --noEmit",
       "prettier --write"
     ],
     "*.{js,json,css,scss,html,md}": [
