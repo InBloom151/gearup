@@ -15,7 +15,7 @@ repos:
         - --in-place
         - --aggressive
         - --max-line-length=88
-          # - --aggressive
+
   - repo: https://github.com/psf/black
     rev: 24.1.0
     hooks:
@@ -32,16 +32,3 @@ repos:
     hooks:
       - id: flake8
         args: ["--max-line-length=88", "--extend-ignore=E203"]
-
-#-----------------FRONTEND--------------------------------
-
-  - repo: https://github.com/okonet/lint-staged
-    rev: v15.2.2
-    hooks:
-      - id: lint-staged
-        additional_dependencies:
-          - eslint@^9.0.0
-          - prettier@^3.3.2
-          - typescript@^5.4.5
-        files: ^frontend/
-        pass_filenames: false
