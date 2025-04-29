@@ -5,30 +5,27 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['dist/**', 'build/**']
+    ignores: ['dist/**', 'build/**'],
   },
   ...tseslint.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh
+      'react-refresh': reactRefresh,
     },
     languageOptions: {
       parser: tseslint.parser,
       globals: {
         ...globals.browser,
-        React: true
-      }
+        React: true,
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true }
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': 'error',
-      'no-console': 'warn'
-    }
-  }
+      'no-console': 'warn',
+    },
+  },
 ];
