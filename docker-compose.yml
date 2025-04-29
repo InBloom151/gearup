@@ -33,6 +33,20 @@ services:
       - "8000:8000"
     networks: [gearup]
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: ${STAGE:-dev}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    networks: [gearup]
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
 
